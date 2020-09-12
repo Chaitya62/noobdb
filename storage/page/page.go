@@ -3,9 +3,9 @@ package page
 const PAGE_SIZE = 4096
 
 type Page interface {
-	getData() [PAGE_SIZE]byte
-	getPageId() uint32
-	resetMemory() error
+	GetData() [PAGE_SIZE]byte
+	GetPageId() uint32
+	ResetMemory() error
 }
 
 type PageImpl struct {

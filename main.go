@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/chaitya62/mygodb/storage/disk"
-	"github.com/chaitya62/mygodb/storage/page"
+	"github.com/chaitya62/noobdb/storage/disk"
+	"github.com/chaitya62/noobdb/storage/page"
 )
 
 func main() {

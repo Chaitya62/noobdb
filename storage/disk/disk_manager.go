@@ -2,7 +2,7 @@ package diskio
 
 import (
 	"fmt"
-	"github.com/chaitya62/mygodb/storage/page"
+	"github.com/chaitya62/noobdb/storage/page"
 	"os"
 )
 

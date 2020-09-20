@@ -18,6 +18,7 @@ func (i *Integer) SetValue(v interface{}) {
 	i.val = v.(int64)
 }
 
+// https://golang.org/src/encoding/binary/binary.go
 func (i *Integer) Serialize() []byte {
 	data := make([]byte, 8)
 

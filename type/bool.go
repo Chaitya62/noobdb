@@ -35,6 +35,10 @@ func (b *Boolean) Deserialize(data []byte) {
 	b.val = (data[0]&1 == 1)
 }
 
+func (b *Boolean) GetSize() uint64 {
+	return uint64(1)
+}
+
 func (b *Boolean) GetValue() interface{} {
 	return b.val
 }

@@ -33,6 +33,10 @@ func (i *Integer) Serialize() []byte {
 	return data
 }
 
+func (i *Integer) GetSize() uint64 {
+	return uint64(8)
+}
+
 func (i *Integer) Deserialize(data []byte) {
 	if len(data) != 8 {
 		fmt.Println("Invalid memory block")

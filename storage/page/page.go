@@ -29,7 +29,7 @@ func (p *PageImpl) SetData(d []byte) error {
 }
 
 func (p *PageImpl) ResetMemory() error {
-	copy(p._data[:], make([]byte, 4096))
+	copy(p._data[:], make([]byte, PAGE_SIZE))
 	return nil
 }
 

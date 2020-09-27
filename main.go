@@ -4,6 +4,7 @@ import (
 	"fmt"
 	//"github.com/chaitya62/noobdb/storage/disk"
 	//"github.com/chaitya62/noobdb/storage/page"
+	"github.com/chaitya62/noobdb/storage/page"
 	"github.com/chaitya62/noobdb/type"
 )
 
@@ -20,54 +21,71 @@ func main() {
 
 	fmt.Printf("%v %v %v %v\n\n", type_.INTEGER, type_.BOOLEAN, type_.DECIMAL, type_.REALNUMBER)
 
-	var tx type_.Type
+	//	var tx type_.Type
+	//
+	//	tx = new(type_.Integer)
+	//
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("TypeID: ", tx.GetTypeID())
+	//	fmt.Println("TypeName: ", tx.GetTypeName())
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//	tx.Deserialize([]byte{255, 255, 255, 255, 255, 255, 255, 255})
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//	tx.SetValue(int64(123234))
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//
+	//	tx = new(type_.Boolean)
+	//
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("TypeID: ", tx.GetTypeID())
+	//	fmt.Println("TypeName: ", tx.GetTypeName())
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//	tx.Deserialize([]byte{1})
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//
+	//	tx = new(type_.Varchar)
+	//
+	//	fmt.Println("Size: ", tx.GetSize())
+	//
+	//	fmt.Println("TypeID: ", tx.GetTypeID())
+	//	tx.SetValue("WHAT")
+	//	fmt.Println("TypeName: ", tx.GetTypeName())
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	fmt.Println("Serialized: ", tx.Serialize())
+	//	tx.Deserialize([]byte{5, 0, 0, 0, 'W', 'N', 'G', 80, '1'})
+	//	fmt.Println("TypeID: ", tx.GetTypeID())
+	//	fmt.Println("TypeName: ", tx.GetTypeName())
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("Value: ", tx.GetValue())
+	//	tx.Deserialize([]byte{0, 0, 0, 0})
+	//	fmt.Println("TypeID: ", tx.GetTypeID())
+	//	fmt.Println("TypeName: ", tx.GetTypeName())
+	//	fmt.Println("Size: ", tx.GetSize())
+	//	fmt.Println("Value: ", tx.GetValue())
 
-	tx = new(type_.Integer)
+	schemaPage := new(page.SchemaPage)
+	schemaPage.Init()
+	fmt.Println("TABLE DATA: ", schemaPage.GetData())
+	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
 
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("TypeID: ", tx.GetTypeID())
-	fmt.Println("TypeName: ", tx.GetTypeName())
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
-	tx.Deserialize([]byte{255, 255, 255, 255, 255, 255, 255, 255})
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
-	tx.SetValue(int64(123234))
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
+	var schemaTuple page.SchemaTuple
+	schemaTuple.Init()
 
-	tx = new(type_.Boolean)
+	fmt.Println("TUPLE DATA: ", schemaTuple.GetData())
+	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
 
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("TypeID: ", tx.GetTypeID())
-	fmt.Println("TypeName: ", tx.GetTypeName())
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
-	tx.Deserialize([]byte{1})
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
+	schemaPage.InsertTuple(schemaTuple)
+	schemaPage.InsertTuple(schemaTuple)
 
-	tx = new(type_.Varchar)
-
-	fmt.Println("Size: ", tx.GetSize())
-
-	fmt.Println("TypeID: ", tx.GetTypeID())
-	tx.SetValue("WHAT")
-	fmt.Println("TypeName: ", tx.GetTypeName())
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("Value: ", tx.GetValue())
-	fmt.Println("Serialized: ", tx.Serialize())
-	tx.Deserialize([]byte{5, 0, 0, 0, 'W', 'N', 'G', 80, '1'})
-	fmt.Println("TypeID: ", tx.GetTypeID())
-	fmt.Println("TypeName: ", tx.GetTypeName())
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("Value: ", tx.GetValue())
-	tx.Deserialize([]byte{0, 0, 0, 0})
-	fmt.Println("TypeID: ", tx.GetTypeID())
-	fmt.Println("TypeName: ", tx.GetTypeName())
-	fmt.Println("Size: ", tx.GetSize())
-	fmt.Println("Value: ", tx.GetValue())
+	fmt.Println("TABLE DATA: ", schemaPage.GetData())
+	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
 
 	//x := new(page.PageImpl)
 	//dmi := diskio.NewDiskManagerImpl("db.txt")

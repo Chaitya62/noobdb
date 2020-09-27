@@ -25,6 +25,7 @@ func (p *PageImpl) GetPageId() uint32 {
 
 func (p *PageImpl) SetData(d []byte) error {
 	copy(p._data[:], d)
+	p._page_id = (uint32(d[0]) | (uint32(d[1]) << 8) | (uint32(d[2]) << 16) | (uint32(d[3]) << 24))
 	return nil
 }
 
@@ -35,6 +36,10 @@ func (p *PageImpl) ResetMemory() error {
 
 func (p *PageImpl) SetPageId(page_id uint32) {
 	p._page_id = page_id
+	p._data[0] = byte(page_id)
+	p._data[1] = byte(page_id >> 8)
+	p._data[2] = byte(page_id >> 16)
+	p._data[3] = byte(page_id >> 24)
 }
 
 func InvalidPage() Page {

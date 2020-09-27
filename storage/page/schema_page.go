@@ -30,7 +30,7 @@ func (sp *SchemaPage) GetHeader() []byte {
 	return sp._data[:24]
 }
 
-// right now giving it only 2 bits
+// right now giving it only 2 bytes
 // we have space for more
 // but with 2 byte it means we can only have a page with maxsize 2^16 -> 65535
 func (sp *SchemaPage) GetFreeSpacePointer() uint16 {

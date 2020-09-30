@@ -98,29 +98,48 @@ func (sp *SchemaPage) InsertTuple(tp SchemaTuple) error {
 	// check if space is there
 }
 
+const (
+	SCHEMA_ID = iota
+	SCHEMA_TABLE_ID
+	SCHEMA_TABLE_NAME
+	SCHEMA_COLUMN_POSITION
+	SCHEMA_COLUMN_NAME
+	SCHEMA_COLUMN_TYPE
+)
+
 // hard coding the tuples schema for schemaPage / Table
 //TODO: CREATE A TUPLE INTERFACE
 type SchemaTuple struct {
-	id              type_.Integer
-	table_id        type_.Integer
-	table_name      type_.Varchar
-	column_position type_.Integer
-	column_name     type_.Varchar
-	column_type     type_.Varchar
 	//TODO: Add more columns for meta data / auto increament etc
-	_data []byte
+	_data []type_.Type
 }
 
 func (st *SchemaTuple) Init() {
-	st.column_name.SetValue("id")
-	st.table_name.SetValue("schema_table")
-	st.column_type.SetValue("INTEGER")
+	schema_schema := []string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
+	for _, s := range schema_schema {
+		st._data = append(st._data, type_.TypeFactory(s))
+	}
+
+	st._data[SCHEMA_COLUMN_NAME].SetValue("id")
+	st._data[SCHEMA_TABLE_NAME].SetValue("schema_table")
+	st._data[SCHEMA_COLUMN_TYPE].SetValue("INTEGER")
 }
 
 func (st *SchemaTuple) GetSize() uint64 {
-	return (st.id.GetSize() + st.table_id.GetSize() + st.table_name.GetSize() + st.column_position.GetSize() + st.column_name.GetSize() + st.column_type.GetSize())
+	var size_ uint64
+	for _, s := range st._data {
+		size_ += s.GetSize()
+	}
+
+	return size_
 }
 
 func (st *SchemaTuple) GetData() []byte {
-	return append(st.id.Serialize(), append(st.table_id.Serialize(), append(st.table_name.Serialize(), append(st.column_position.Serialize(), append(st.column_name.Serialize(), st.column_type.Serialize()...)...)...)...)...)
+	_data := make([]byte, st.GetSize())
+	var index int
+	for _, s := range st._data {
+		index += copy(_data[index:], s.Serialize())
+	}
+	//return append(st._data[0].Serialize(), append(st._data[1].Serialize(), append(st._data[2].Serialize(), append(st._data[3].Serialize(), append(st._data[4].Serialize(), st._data[5].Serialize()...)...)...)...)...)
+	return _data
 }

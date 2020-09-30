@@ -1,9 +1,5 @@
 package type_
 
-import (
-	"strconv"
-)
-
 type Varchar struct {
 	val  string
 	_len uint32
@@ -14,8 +10,8 @@ func (vc *Varchar) GetTypeID() int8 {
 }
 
 func (vc *Varchar) GetTypeName() string {
-	type_name := "VARCHAR(" + strconv.Itoa(int(vc._len)) + ")"
-	return type_name
+	//type_name := "VARCHAR(" + strconv.Itoa(int(vc._len)) + ")"
+	return "VARCHAR"
 }
 
 func (vc *Varchar) SetValue(v interface{}) {

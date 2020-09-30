@@ -5,7 +5,7 @@ import (
 	//"github.com/chaitya62/noobdb/storage/disk"
 	//"github.com/chaitya62/noobdb/storage/page"
 	"github.com/chaitya62/noobdb/storage/page"
-	"github.com/chaitya62/noobdb/type"
+	//"github.com/chaitya62/noobdb/type"
 )
 
 func main() {
@@ -18,8 +18,6 @@ func main() {
 	fmt.Println(len(x2))
 
 	//return
-
-	fmt.Printf("%v %v %v %v\n\n", type_.INTEGER, type_.BOOLEAN, type_.DECIMAL, type_.REALNUMBER)
 
 	//	var tx type_.Type
 	//

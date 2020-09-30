@@ -20,3 +20,19 @@ type Type interface {
 	Serialize() []byte
 	Deserialize(b []byte)
 }
+
+func TypeFactory(type_name string) Type {
+
+	var type_obj Type
+
+	switch type_name {
+	case "INTEGER":
+		type_obj = new(Integer)
+	case "VARCHAR":
+		type_obj = new(Varchar)
+	case "BOOLEAN":
+		type_obj = new(Boolean)
+	}
+
+	return type_obj
+}

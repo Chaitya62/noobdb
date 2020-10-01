@@ -29,7 +29,7 @@ func (b *Boolean) Serialize() []byte {
 }
 
 func (b *Boolean) Deserialize(data []byte) {
-	if len(data) != 1 {
+	if len(data) < 1 {
 		fmt.Println("Invalid memory block")
 	}
 	b.val = (data[0]&1 == 1)

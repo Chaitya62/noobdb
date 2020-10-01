@@ -36,3 +36,13 @@ func TypeFactory(type_name string) Type {
 
 	return type_obj
 }
+
+func TypeFromTupleFactory(type_name string, data_ []byte, curr_pos uint64) (uint64, Type) {
+
+	type_obj := TypeFactory(type_name)
+	type_obj.Deserialize(data_[curr_pos:])
+	next_pos := curr_pos + type_obj.GetSize()
+
+	return next_pos, type_obj
+
+}

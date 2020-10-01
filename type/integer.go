@@ -39,7 +39,7 @@ func (i *Integer) GetSize() uint64 {
 }
 
 func (i *Integer) Deserialize(data []byte) {
-	if len(data) != 8 {
+	if len(data) < 8 {
 		fmt.Println("Invalid memory block")
 	}
 	i.val = (int64(data[7])<<56 | int64(data[6])<<48 | int64(data[5])<<40 | int64(data[4])<<32 | int64(data[3])<<24 | int64(data[2])<<16 | int64(data[1])<<8 | int64(data[0]))

@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	//"github.com/chaitya62/noobdb/storage/disk"
-	//"github.com/chaitya62/noobdb/storage/page"
+	"github.com/chaitya62/noobdb/storage/disk"
 	"github.com/chaitya62/noobdb/storage/page"
 	//"github.com/chaitya62/noobdb/type"
 )
@@ -68,6 +67,10 @@ func main() {
 	//	fmt.Println("Size: ", tx.GetSize())
 	//	fmt.Println("Value: ", tx.GetValue())
 
+	// Creaet a schema table
+
+	dmi := diskio.NewDiskManagerImpl("schema.txt")
+
 	schemaPage := new(page.SchemaPage)
 	schemaPage.Init()
 	fmt.Println("TABLE DATA: ", schemaPage.GetData())
@@ -75,18 +78,67 @@ func main() {
 
 	var schemaTuple page.SchemaTuple
 	schemaTuple.Init()
+	schemaTuple.InitDefault()
+
+	fmt.Println("\n\n")
+	schemaTuple.PrintTuple()
+	fmt.Println("\n\n")
 
 	fmt.Println("TUPLE DATA: ", schemaTuple.GetData())
-	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
 
 	schemaPage.InsertTuple(schemaTuple)
+
+	var schema_id int64
+	var table_id int64
+	var column_pos int64
+	schema_id = 1
+	table_id = 0
+	column_pos = 1
+
+	schemaTuple.SetValueFor(page.SCHEMA_ID, schema_id)
+	schemaTuple.SetValueFor(page.SCHEMA_TABLE_ID, table_id)
+	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_NAME, "first_name")
+	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_TYPE, "VARCHAR")
+	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_POSITION, column_pos)
+
+	fmt.Println("\n\n")
+	schemaTuple.PrintTuple()
+	fmt.Println("\n\n")
+
+	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
+
 	schemaPage.InsertTuple(schemaTuple)
 
 	fmt.Println("TABLE DATA: ", schemaPage.GetData())
 	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
 
 	//x := new(page.PageImpl)
-	//dmi := diskio.NewDiskManagerImpl("db.txt")
+	dmi.WritePage(0, schemaPage)
+
+	//  Read Schema table from a page
+
+	Page := dmi.ReadPage(0).(*page.PageImpl)
+
+	schemaPageR := page.SchemaPage{PageImpl: *Page}
+
+	fmt.Println(schemaPageR.GetData())
+
+	tuple := schemaPageR.ReadTuple(0)
+	tuple2 := schemaPageR.ReadTuple(1)
+
+	fmt.Println(tuple)
+	fmt.Println(tuple2)
+
+	var schemaTupleR page.SchemaTuple
+
+	schemaTupleR.Init()
+
+	schemaTupleR.ReadTuple(tuple)
+	schemaTupleR.PrintTuple()
+
+	schemaTupleR.ReadTuple(tuple2)
+	schemaTupleR.PrintTuple()
+
 	//_data := x.GetData()
 	//for i := 0; i < 1000; i++ {
 	//	_data[i] = byte(i)

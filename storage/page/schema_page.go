@@ -16,6 +16,8 @@ const SLOT_ID_SIZE = 4
 const TUPLE_LOCATION_SIZE = 2
 const SLOT_SIZE = 6
 
+var schema_schema [6]string
+
 type SchemaPage struct {
 	PageImpl
 }
@@ -52,6 +54,25 @@ func (sp *SchemaPage) SetFreeSpacePointer(fsp uint16) error {
 	sp._data[4] = byte(fsp)
 	sp._data[5] = byte(fsp >> 8)
 	return nil
+}
+
+func (sp *SchemaPage) GetSlotStart(i uint16) uint16 {
+	x := SLOT_OFFSET + (SLOT_ID_SIZE+TUPLE_LOCATION_SIZE)*i
+	return (uint16(sp._data[x+4]) | uint16(sp._data[x+5])<<8)
+}
+
+func (sp *SchemaPage) ReadTuple(i uint16) []byte {
+	//TODO: error handling
+
+	var end_at uint16
+	end_at = 4096
+	start_at := sp.GetSlotStart(i)
+	if i > 0 {
+		end_at = sp.GetSlotStart((i - 1))
+	}
+
+	return sp._data[start_at:end_at]
+
 }
 
 func (sp *SchemaPage) InsertTuple(tp SchemaTuple) error {
@@ -115,7 +136,11 @@ type SchemaTuple struct {
 }
 
 func (st *SchemaTuple) Init() {
-	schema_schema := []string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
+	schema_schema = [6]string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
+}
+
+func (st *SchemaTuple) InitDefault() {
+
 	for _, s := range schema_schema {
 		st._data = append(st._data, type_.TypeFactory(s))
 	}
@@ -123,6 +148,33 @@ func (st *SchemaTuple) Init() {
 	st._data[SCHEMA_COLUMN_NAME].SetValue("id")
 	st._data[SCHEMA_TABLE_NAME].SetValue("schema_table")
 	st._data[SCHEMA_COLUMN_TYPE].SetValue("INTEGER")
+
+}
+
+func (st *SchemaTuple) ReadTuple(data_ []byte) {
+	var curr_pos uint64
+	st._data = []type_.Type{}
+	for _, s := range schema_schema {
+		next_pos, type_obj := type_.TypeFromTupleFactory(s, data_, curr_pos)
+		curr_pos = next_pos
+		st._data = append(st._data, type_obj)
+	}
+}
+
+func (st *SchemaTuple) PrintTuple() {
+	fmt.Printf("| ")
+	for _, s := range st._data {
+		fmt.Printf(" %v |", s.GetValue())
+	}
+	fmt.Printf("\n")
+}
+
+func (st *SchemaTuple) SetValueFor(column_i uint64, val interface{}) {
+	st._data[column_i].SetValue(val)
+}
+
+func (st *SchemaTuple) GetValueFor(column_i uint64) interface{} {
+	return st._data[column_i].GetValue()
 }
 
 func (st *SchemaTuple) GetSize() uint64 {

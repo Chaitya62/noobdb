@@ -1,7 +1,7 @@
 package type_
 
 import (
-	"fmt"
+	"errors"
 )
 
 type Boolean struct {
@@ -28,11 +28,13 @@ func (b *Boolean) Serialize() []byte {
 	return data
 }
 
-func (b *Boolean) Deserialize(data []byte) {
+func (b *Boolean) Deserialize(data []byte) error {
 	if len(data) < 1 {
-		fmt.Println("Invalid memory block")
+		return errors.New("Invalid size of byte slice")
 	}
 	b.val = (data[0]&1 == 1)
+
+	return nil
 }
 
 func (b *Boolean) GetSize() uint64 {

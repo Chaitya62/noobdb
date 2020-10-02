@@ -80,9 +80,7 @@ func main() {
 	schemaTuple.Init()
 	schemaTuple.InitDefault()
 
-	fmt.Println("\n\n")
 	schemaTuple.PrintTuple()
-	fmt.Println("\n\n")
 
 	fmt.Println("TUPLE DATA: ", schemaTuple.GetData())
 
@@ -101,9 +99,7 @@ func main() {
 	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_TYPE, "VARCHAR")
 	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_POSITION, column_pos)
 
-	fmt.Println("\n\n")
 	schemaTuple.PrintTuple()
-	fmt.Println("\n\n")
 
 	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
 

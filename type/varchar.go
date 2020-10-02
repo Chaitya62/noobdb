@@ -42,9 +42,10 @@ func (vc *Varchar) GetSize() uint64 {
 // this seems tricky
 // for now assuming that we will get the entire memory location with length and string
 // might have to re-think the implementation later if the api becomes tedious to call
-func (vc *Varchar) Deserialize(data []byte) {
+func (vc *Varchar) Deserialize(data []byte) error {
 	vc._len = (uint32(data[3])<<24 | uint32(data[2])<<16 | uint32(data[1])<<8 | uint32(data[0]))
 	vc.val = string(data[4 : 4+vc._len])
+	return nil
 }
 
 func (vc *Varchar) GetValue() interface{} {

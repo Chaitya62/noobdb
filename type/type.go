@@ -18,7 +18,7 @@ type Type interface {
 	GetValue() interface{}
 	SetValue(interface{})
 	Serialize() []byte
-	Deserialize(b []byte)
+	Deserialize(b []byte) error
 }
 
 func TypeFactory(type_name string) Type {

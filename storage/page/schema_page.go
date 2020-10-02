@@ -6,7 +6,7 @@ package page
 
 import (
 	"fmt"
-	"github.com/chaitya62/noobdb/type"
+	//"github.com/chaitya62/noobdb/type"
 )
 
 const TABLE_NAME_LIMT = 2048
@@ -15,8 +15,6 @@ const SLOT_OFFSET = 24
 const SLOT_ID_SIZE = 4
 const TUPLE_LOCATION_SIZE = 2
 const SLOT_SIZE = 6
-
-var schema_schema [6]string
 
 type SchemaPage struct {
 	PageImpl
@@ -75,7 +73,7 @@ func (sp *SchemaPage) ReadTuple(i uint16) []byte {
 
 }
 
-func (sp *SchemaPage) InsertTuple(tp SchemaTuple) error {
+func (sp *SchemaPage) InsertTuple(tp Tuple) error {
 	tp_size := tp.GetSize()
 
 	fp := sp.GetFreeSpacePointer()
@@ -117,81 +115,4 @@ func (sp *SchemaPage) InsertTuple(tp SchemaTuple) error {
 
 	return nil
 	// check if space is there
-}
-
-const (
-	SCHEMA_ID = iota
-	SCHEMA_TABLE_ID
-	SCHEMA_TABLE_NAME
-	SCHEMA_COLUMN_POSITION
-	SCHEMA_COLUMN_NAME
-	SCHEMA_COLUMN_TYPE
-)
-
-// hard coding the tuples schema for schemaPage / Table
-//TODO: CREATE A TUPLE INTERFACE
-type SchemaTuple struct {
-	//TODO: Add more columns for meta data / auto increament etc
-	_data []type_.Type
-}
-
-func (st *SchemaTuple) Init() {
-	schema_schema = [6]string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
-}
-
-func (st *SchemaTuple) InitDefault() {
-
-	for _, s := range schema_schema {
-		st._data = append(st._data, type_.TypeFactory(s))
-	}
-
-	st._data[SCHEMA_COLUMN_NAME].SetValue("id")
-	st._data[SCHEMA_TABLE_NAME].SetValue("schema_table")
-	st._data[SCHEMA_COLUMN_TYPE].SetValue("INTEGER")
-
-}
-
-func (st *SchemaTuple) ReadTuple(data_ []byte) {
-	var curr_pos uint64
-	st._data = []type_.Type{}
-	for _, s := range schema_schema {
-		next_pos, type_obj := type_.TypeFromTupleFactory(s, data_, curr_pos)
-		curr_pos = next_pos
-		st._data = append(st._data, type_obj)
-	}
-}
-
-func (st *SchemaTuple) PrintTuple() {
-	fmt.Printf("| ")
-	for _, s := range st._data {
-		fmt.Printf(" %v |", s.GetValue())
-	}
-	fmt.Printf("\n")
-}
-
-func (st *SchemaTuple) SetValueFor(column_i uint64, val interface{}) {
-	st._data[column_i].SetValue(val)
-}
-
-func (st *SchemaTuple) GetValueFor(column_i uint64) interface{} {
-	return st._data[column_i].GetValue()
-}
-
-func (st *SchemaTuple) GetSize() uint64 {
-	var size_ uint64
-	for _, s := range st._data {
-		size_ += s.GetSize()
-	}
-
-	return size_
-}
-
-func (st *SchemaTuple) GetData() []byte {
-	_data := make([]byte, st.GetSize())
-	var index int
-	for _, s := range st._data {
-		index += copy(_data[index:], s.Serialize())
-	}
-	//return append(st._data[0].Serialize(), append(st._data[1].Serialize(), append(st._data[2].Serialize(), append(st._data[3].Serialize(), append(st._data[4].Serialize(), st._data[5].Serialize()...)...)...)...)...)
-	return _data
 }

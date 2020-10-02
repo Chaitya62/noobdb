@@ -76,15 +76,19 @@ func main() {
 	fmt.Println("TABLE DATA: ", schemaPage.GetData())
 	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
 
-	var schemaTuple page.SchemaTuple
-	schemaTuple.Init()
-	schemaTuple.InitDefault()
+	// move this logic to schema module
+	schema_schema := [6]string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
+	var schemaTuple page.TupleImpl
+	schemaTuple.Init(schema_schema[:])
+	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_NAME, "id")
+	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_TYPE, "INTEGER")
+	schemaTuple.SetValueFor(page.SCHEMA_TABLE_NAME, "schema_table")
 
 	schemaTuple.PrintTuple()
 
 	fmt.Println("TUPLE DATA: ", schemaTuple.GetData())
 
-	schemaPage.InsertTuple(schemaTuple)
+	schemaPage.InsertTuple(&schemaTuple)
 
 	var schema_id int64
 	var table_id int64
@@ -103,7 +107,7 @@ func main() {
 
 	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
 
-	schemaPage.InsertTuple(schemaTuple)
+	schemaPage.InsertTuple(&schemaTuple)
 
 	fmt.Println("TABLE DATA: ", schemaPage.GetData())
 	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
@@ -125,9 +129,9 @@ func main() {
 	fmt.Println(tuple)
 	fmt.Println(tuple2)
 
-	var schemaTupleR page.SchemaTuple
+	var schemaTupleR page.TupleImpl
 
-	schemaTupleR.Init()
+	schemaTupleR.Init(schema_schema[:])
 
 	schemaTupleR.ReadTuple(tuple)
 	schemaTupleR.PrintTuple()

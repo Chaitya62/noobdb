@@ -1,14 +1,15 @@
 package diskio
 
 import (
+	"errors"
 	"fmt"
 	"github.com/chaitya62/noobdb/storage/page"
 	"os"
 )
 
 type DiskManager interface {
-	WritePage(page_id int32, pg page.Page) error
-	ReadPage(page_id int32) page.Page
+	WritePage(page_id uint32, pg page.Page) error
+	ReadPage(page_id uint32) page.Page
 }
 
 type DiskManagerImpl struct {
@@ -16,10 +17,10 @@ type DiskManagerImpl struct {
 	db_file      *os.File
 }
 
-func NewDiskManagerImpl(db_file string) DiskManagerImpl {
-	dmi := DiskManagerImpl{db_file, nil}
+func NewDiskManagerImpl(db_file_name string) DiskManager {
+	dmi := DiskManagerImpl{db_file_name, nil}
 	dmi.initFile()
-	return dmi
+	return &dmi
 }
 
 func (dmi *DiskManagerImpl) initFile() error {
@@ -32,6 +33,10 @@ func (dmi *DiskManagerImpl) initFile() error {
 }
 
 func (dmi *DiskManagerImpl) WritePage(page_id uint32, pg page.Page) error {
+
+	if page_id == page.INVALID_PAGE_ID {
+		return errors.New("Cannot write Invalid Page")
+	}
 
 	var offset int64
 	offset = page.PAGE_SIZE * int64(page_id)

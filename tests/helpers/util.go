@@ -32,3 +32,11 @@ func EqualSlices(t *testing.T, expected, got interface{}) {
 		t.Errorf("Expected: %v, Got: %v", expected, got)
 	}
 }
+
+func NotEqualSlices(t *testing.T, expected, got interface{}) {
+	ok := reflect.DeepEqual(expected, got)
+
+	if ok {
+		t.Errorf("Expected %v not to be equal to %v", got, expected)
+	}
+}

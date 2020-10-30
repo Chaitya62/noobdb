@@ -1,7 +1,7 @@
 package type_
 
 // for now we will only have numeric types
-// introduce characters, text etc later
+//import "fmt"
 
 const (
 	BOOLEAN = iota
@@ -38,6 +38,10 @@ func TypeFactory(type_name string) Type {
 }
 
 func TypeFromTupleFactory(type_name string, data_ []byte, curr_pos uint64) (uint64, Type) {
+
+	if len(data_) == 0 {
+		return uint64(0), nil
+	}
 
 	type_obj := TypeFactory(type_name)
 	type_obj.Deserialize(data_[curr_pos:])

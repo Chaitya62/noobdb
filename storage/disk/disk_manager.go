@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+//TODO: Implement page delete logic to freeup disk space
+
 type DiskManager interface {
 	WritePage(page_id uint32, pg page.Page) error
 	ReadPage(page_id uint32) page.Page

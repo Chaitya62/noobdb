@@ -13,8 +13,10 @@ type Page interface {
 }
 
 type PageImpl struct {
-	_data    [PAGE_SIZE]byte
-	_page_id uint32
+	_data      [PAGE_SIZE]byte
+	_page_id   uint32
+	_dirty     bool
+	_pin_count uint64
 }
 
 func (p *PageImpl) GetData() []byte {
@@ -31,6 +33,7 @@ func (p *PageImpl) SetData(d []byte) error {
 	}
 	copy(p._data[:], d)
 	p._page_id = (uint32(d[0]) | (uint32(d[1]) << 8) | (uint32(d[2]) << 16) | (uint32(d[3]) << 24))
+	p._dirty = true
 	return nil
 }
 
@@ -46,9 +49,10 @@ func (p *PageImpl) SetPageId(page_id uint32) {
 	p._data[1] = byte(page_id >> 8)
 	p._data[2] = byte(page_id >> 16)
 	p._data[3] = byte(page_id >> 24)
+	p._dirty = true
 }
 
 func InvalidPage() Page {
 	// the first four bits are no equal to page_id
-	return &PageImpl{[PAGE_SIZE]byte{}, INVALID_PAGE_ID}
+	return &PageImpl{[PAGE_SIZE]byte{}, INVALID_PAGE_ID, false, 0}
 }

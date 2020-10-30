@@ -22,8 +22,6 @@ type Tuple interface {
 	GetData() []byte
 }
 
-// hard coding the tuples schema for schemaPage / Table
-//TODO: CREATE A TUPLE INTERFACE
 type TupleImpl struct {
 	//TODO: Add more columns for meta data / auto increament etc
 	_data   []type_.Type
@@ -39,6 +37,9 @@ func (st *TupleImpl) Init(s_ []string) {
 }
 
 func (st *TupleImpl) ReadTuple(data_ []byte) {
+	if len(data_) == 0 {
+		return
+	}
 	var curr_pos uint64
 	st._data = []type_.Type{}
 	for _, s := range st._schema {

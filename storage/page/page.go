@@ -53,6 +53,6 @@ func (p *PageImpl) SetPageId(page_id uint32) {
 }
 
 func InvalidPage() Page {
-	// the first four bits are no equal to page_id
+	// the first four bits are not equal to page_id
 	return &PageImpl{[PAGE_SIZE]byte{}, INVALID_PAGE_ID, false, 0}
 }

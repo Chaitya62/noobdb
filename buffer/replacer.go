@@ -68,17 +68,21 @@ func (cr *ClockReplacer) GetNextVictim() (int, bool) {
 func (cr *ClockReplacer) PinPage(frame_id int) {
 	cr.size_lock.Lock()
 	defer cr.size_lock.Unlock()
-	cr._frames[frame_id] = false
-	cr._frames_ref[frame_id] = false
-	cr._size--
+	if cr._frames[frame_id] {
+		cr._frames[frame_id] = false
+		cr._frames_ref[frame_id] = false
+		cr._size--
+	}
 }
 
 func (cr *ClockReplacer) UnPinPage(frame_id int) {
 	cr.size_lock.Lock()
 	defer cr.size_lock.Unlock()
-	cr._frames[frame_id] = true
-	cr._frames_ref[frame_id] = true
-	cr._size++
+	if !cr._frames[frame_id] {
+		cr._frames[frame_id] = true
+		cr._frames_ref[frame_id] = true
+		cr._size++
+	}
 }
 
 func (cr *ClockReplacer) Size() int {

@@ -1,7 +1,6 @@
 package buffer_test
 
 import (
-	//	"fmt"
 	"github.com/chaitya62/noobdb/buffer"
 	"github.com/chaitya62/noobdb/storage/disk"
 	"github.com/chaitya62/noobdb/storage/page"
@@ -38,6 +37,34 @@ func TestBufferPoolManager(t *testing.T) {
 		_page := bpm.GetPage(uint32(1245))
 
 		helpers.Equals(t, uint32(page.INVALID_PAGE_ID), _page.GetPageId())
+
+	})
+
+	t.Run("should return invalid page if no empty frame left", func(t *testing.T) {
+
+		// insert pages
+		// and get in memory
+		for i := uint32(0); i < uint32(6); i++ {
+			_page := page.InvalidPage()
+			_page.SetPageId(i)
+			dmi.WritePage(i, _page)
+		}
+
+		// pin all pages in memory
+		for i := uint32(0); i < uint32(5); i++ {
+			_ = bpm.GetPage(i)
+			bpm.PinPage(i)
+		}
+
+		_page := bpm.GetPage(5)
+
+		helpers.Equals(t, uint32(page.INVALID_PAGE_ID), _page.GetPageId())
+
+		// tear down
+
+		for i := uint32(0); i < uint32(5); i++ {
+			bpm.UnPinPage(i)
+		}
 
 	})
 

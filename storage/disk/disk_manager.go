@@ -9,9 +9,14 @@ import (
 
 //TODO: Implement page delete logic to freeup disk space
 
+// to be appended to all the db_file_name
+// TODO: Start using this
+const DB_FILE_FOLDER = ""
+
 type DiskManager interface {
 	WritePage(page_id uint32, pg page.Page) error
 	ReadPage(page_id uint32) page.Page
+	GetNumberOfPages() int
 }
 
 type DiskManagerImpl struct {
@@ -53,6 +58,17 @@ func (dmi *DiskManagerImpl) WritePage(page_id uint32, pg page.Page) error {
 	err = dmi.db_file.Sync()
 
 	return err
+}
+
+func (dmi *DiskManagerImpl) GetNumberOfPages() int {
+	file_info, err := dmi.db_file.Stat()
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+
+	return (int(file_info.Size()) / page.PAGE_SIZE)
+
 }
 
 func (dmi *DiskManagerImpl) ReadPage(page_id uint32) page.Page {

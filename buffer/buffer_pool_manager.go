@@ -15,6 +15,12 @@ type BufferPoolManager struct {
 	replacer   Replacer
 }
 
+func GetNewBufferPoolManager(buffer_size int, dmi diskio.DiskManager) *BufferPoolManager {
+	bpm := new(BufferPoolManager)
+	bpm.Init(buffer_size, dmi)
+	return bpm
+}
+
 func (bpm *BufferPoolManager) Init(buffer_size int, dmi diskio.DiskManager) {
 	bpm.pages = make([]page.Page, buffer_size)
 	bpm.dmi = dmi
@@ -43,6 +49,7 @@ func (bpm *BufferPoolManager) UnPinPage(page_id uint32) bool {
 	return ok
 }
 
+// not thread safe
 func (bpm *BufferPoolManager) GetPage(page_id uint32) page.Page {
 	// if page is not there
 	// fetch it via dmi

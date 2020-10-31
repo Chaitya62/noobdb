@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/chaitya62/noobdb/buffer"
+	"github.com/chaitya62/noobdb/schema"
 	"github.com/chaitya62/noobdb/storage/disk"
 	"github.com/chaitya62/noobdb/storage/page"
 	"time"
@@ -52,7 +53,7 @@ func accessMemory(i int, bpm *buffer.BufferPoolManager, schema_schema []string, 
 
 }
 
-func main() {
+func testBufferPoolManagerAsync() {
 
 	var TupleChannel chan page.TupleImpl
 	dmi := diskio.NewDiskManagerImpl("schema.txt")
@@ -62,51 +63,6 @@ func main() {
 
 	// move this logic to schema module
 	schema_schema := [6]string{"INTEGER", "INTEGER", "VARCHAR", "INTEGER", "VARCHAR", "VARCHAR"}
-
-	//for i := 0; i < 10; i++ {
-	//	schemaPage := new(page.SchemaPage)
-	//	schemaPage.Init()
-	//	fmt.Println("TABLE DATA: ", schemaPage.GetData())
-	//	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
-
-	//	var schemaTuple page.TupleImpl
-	//	schemaTuple.Init(schema_schema[:])
-	//	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_NAME, "id")
-	//	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_TYPE, "INTEGER")
-	//	schemaTuple.SetValueFor(page.SCHEMA_TABLE_NAME, "schema_table")
-
-	//	schemaTuple.PrintTuple()
-
-	//	fmt.Println("TUPLE DATA: ", schemaTuple.GetData())
-
-	//	schemaPage.InsertTuple(&schemaTuple)
-
-	//	var schema_id int64
-	//	var table_id int64
-	//	var column_pos int64
-	//	schema_id = 1
-	//	table_id = int64(i)
-	//	column_pos = 1
-
-	//	schemaTuple.SetValueFor(page.SCHEMA_ID, schema_id)
-	//	schemaTuple.SetValueFor(page.SCHEMA_TABLE_ID, table_id)
-	//	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_NAME, "first_name")
-	//	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_TYPE, "VARCHAR")
-	//	schemaTuple.SetValueFor(page.SCHEMA_COLUMN_POSITION, column_pos)
-
-	//	schemaTuple.PrintTuple()
-
-	//	fmt.Println("TUPLE SIZE: ", schemaTuple.GetSize())
-
-	//	schemaPage.InsertTuple(&schemaTuple)
-
-	//	fmt.Println("TABLE DATA: ", schemaPage.GetData())
-	//	fmt.Println("FSP: ", schemaPage.GetFreeSpacePointer())
-
-	//	//x := new(page.PageImpl)
-	//	dmi.WritePage(uint32(i), schemaPage)
-
-	//}
 
 	//  Read Schema table from a page
 
@@ -133,18 +89,11 @@ func main() {
 		accessMemory(i, bpm, schema_schema[:], TupleChannel)
 	}
 
-	//_data := x.GetData()
-	//for i := 0; i < 1000; i++ {
-	//}
-	//x.SetData(_data[:])
-	//dmi.WritePage(10, x)
+}
 
-	//var xn page.Page
+func main() {
+	schema_table := new(schema.SchemaTable)
+	schema_table.Init()
 
-	//xn = dmi.ReadPage(12)
-
-	//fmt.Printf("%v\n", xn.GetData())
-	//fmt.Println("%v", xn.GetPageId())
-	//x.ResetMemory()
-	//fmt.Printf("%v", x.GetData())
+	schema_table.Iterator()
 }

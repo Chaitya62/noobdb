@@ -5,21 +5,13 @@ import (
 	"github.com/chaitya62/noobdb/type"
 )
 
-const (
-	SCHEMA_ID = iota
-	SCHEMA_TABLE_ID
-	SCHEMA_TABLE_NAME
-	SCHEMA_COLUMN_POSITION
-	SCHEMA_COLUMN_NAME
-	SCHEMA_COLUMN_TYPE
-)
-
 type Tuple interface {
 	ReadTuple(data_ []byte)
 	SetValueFor(column_i uint64, val interface{})
 	GetValueFor(column_i uint64) interface{}
 	GetSize() uint64
 	GetData() []byte
+	PrintTuple()
 }
 
 type TupleImpl struct {

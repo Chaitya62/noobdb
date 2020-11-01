@@ -1,7 +1,7 @@
 package buffer
 
 import (
-	"fmt"
+	//	"fmt"
 	"sync"
 )
 
@@ -23,8 +23,14 @@ func (pt *PageTable) InsertOrUpdate(key uint32, val int) {
 	pt.index[key] = val
 }
 
+func (pt *PageTable) Delete(key uint32) {
+	pt._lock.Lock()
+	defer pt._lock.Unlock()
+	delete(pt.index, key)
+}
+
 func (pt *PageTable) Get(key uint32) (int, bool) {
-	fmt.Println("Getting Page", key)
+	//	fmt.Println("Getting Page", key)
 	pt._lock.RLock()
 	defer pt._lock.RUnlock()
 	if val, ok := pt.index[key]; ok {

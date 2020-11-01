@@ -20,6 +20,7 @@ func TestPageImpl(t *testing.T) {
 
 		t.Run("SetData - page_id and data", func(t *testing.T) {
 			pageImpl := &page.PageImpl{}
+			pageImpl.Init()
 			data_slice := make([]byte, page.PAGE_SIZE)
 
 			expected_page_id := uint32(12)
@@ -39,6 +40,7 @@ func TestPageImpl(t *testing.T) {
 
 		t.Run("SetData - invalid slice", func(t *testing.T) {
 			pageImpl := &page.PageImpl{}
+			pageImpl.Init()
 
 			invalid_page_size := 1235
 			data_slice := make([]byte, invalid_page_size)
@@ -77,6 +79,8 @@ func TestPageImpl(t *testing.T) {
 
 	t.Run("SetPageId", func(t *testing.T) {
 		pageImpl := &page.PageImpl{}
+		pageImpl.Init()
+
 		data_slice := make([]byte, page.PAGE_SIZE)
 
 		expected_page_id := uint32(12)

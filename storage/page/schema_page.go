@@ -5,6 +5,7 @@ package page
 // slots and tuples
 
 import (
+	"errors"
 	"fmt"
 	//"github.com/chaitya62/noobdb/type"
 )
@@ -22,6 +23,10 @@ type SchemaPage struct {
 
 func (sp *SchemaPage) Init() {
 	sp.SetFreeSpacePointer(4096)
+}
+
+func (sp *SchemaPage) shallowCopy(_page Page) {
+	sp._data = _page.GetData()
 }
 
 func (sp *SchemaPage) GetHeader() []byte {
@@ -83,7 +88,8 @@ func (sp *SchemaPage) InsertTuple(tp Tuple) error {
 
 	if uint64(space_left) < tp_size {
 		//TODO: ADD CUSTOM STANDARD ERROR TYPES TO DATABASE
-		return nil
+		fmt.Println("PAGE is FULL")
+		return errors.New("Page is full")
 	}
 
 	// assuming all tuples fit in one page
@@ -91,9 +97,9 @@ func (sp *SchemaPage) InsertTuple(tp Tuple) error {
 	start_at := fp - uint16(tp_size)
 
 	//TODO: Error handling
-	fmt.Println("HERE")
 	// intert tupple
 	copy(sp._data[start_at:fp], tp.GetData())
+	sp._dirty = true
 
 	// insert slot
 	//TODO: SLOT STRUCT ?

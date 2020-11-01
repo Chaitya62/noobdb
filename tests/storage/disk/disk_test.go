@@ -54,6 +54,7 @@ func TestDiskManagerImpl(t *testing.T) {
 			}
 
 			dummy_page := &page.PageImpl{}
+			dummy_page.Init()
 
 			ok := dmi.WritePage(dummy_page.GetPageId(), dummy_page)
 			if ok != nil {

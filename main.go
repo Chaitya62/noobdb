@@ -95,5 +95,17 @@ func main() {
 	schema_table := new(schema.SchemaTable)
 	schema_table.Init()
 
+	//for i := 0; i < 1000; i++ {
+	//	tuple := schema_table.GetDefaultRow()
+	//	tuple.SetValueFor(schema.SCHEMA_ID, int64(i))
+	//	tuple.SetValueFor(schema.SCHEMA_TABLE_ID, int64(0i))
+	//	tuple.SetValueFor(schema.SCHEMA_TABLE_NAME, "first_table")
+	//	tuple.SetValueFor(schema.SCHEMA_COLUMN_NAME, "id")
+	//	tuple.SetValueFor(schema.SCHEMA_COLUMN_POSITION, int64(1))
+	//	tuple.SetValueFor(schema.SCHEMA_COLUMN_TYPE, "INTEGER")
+	//	schema_table.Insert(tuple)
+	//}
+
+	schema_table.Close()
 	schema_table.Iterator()
 }
